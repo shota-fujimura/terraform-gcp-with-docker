@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  terraform:
+    build: ./terraform
+    container_name: terraform
+    platform: linux/amd64
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+    volumes:
+      - ./terraform/src:/terraform/src
+      - ./gcloud-config:/root/.config
+    
+  gcloud:
+    image: google/cloud-sdk:stable
+    container_name: gcloud
+    working_dir: /terraform
+    platform: linux/amd64
+    volumes:
+      - ./gcloud-config:/root/.config
+    
+volumes:
+  gcloud-config:
